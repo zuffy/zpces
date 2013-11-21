@@ -1,25 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<!-- saved from url=(0014)about:internet -->
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"> 
-    <!-- 
-    Smart developers always View Source. 
-    
-    This application was built using Adobe Flex, an open source framework
-    for building rich Internet applications that get delivered via the
-    Flash Player or to desktops via Adobe AIR. 
-    
-    Learn more about Flex at http://flex.org 
-    // -->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
     <head>
         <title></title>
         <meta name="google" value="notranslate" />         
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <!-- Include CSS to eliminate any default margins/padding and set the height of the html element and 
-             the body element to 100%, because Firefox, or any Gecko based browser, interprets percentage as 
-             the percentage of the height of its parent container, which has to be set explicitly.  Fix for
-             Firefox 3.6 focus border issues.  Initially, don't display flashContent div so it won't show 
-             if JavaScript disabled.
-        -->
         <style type="text/css" media="screen"> 
             html, body  { height:100%; }
             body { margin:0; padding:0; overflow:auto; text-align:center; 
@@ -37,13 +21,13 @@
             params.bgcolor = "#ffffff";
             params.allowscriptaccess = "always";
             params.allowfullscreen = "true";
-            flashvars.uploadUrl = "http://zuffy.com/upload.php";
+            params.wmode = 'transparent'
             var attributes = {};
             attributes.id = "luckDraw";
             attributes.name = "luckDraw";
             attributes.align = "left";
             swfobject.embedSWF(
-                "zpces.swf", "luckDraw", 
+                "pan.swf", "luckDraw", 
                 "100%", "100%", 
                 swfVersionStr, xiSwfUrlStr, 
                 flashvars, params, attributes);
@@ -52,62 +36,98 @@
         </script>
     </head>
         <body>
-        <div style="width:250px;height:420px">
+        <div style="width:1000px;height:800px">
             <div id="luckDraw"></div>
         </div>
-        <div>
-            <p><a id="snapBtn">截屏</a><a>分享</a>
-        <div>
         <script type="text/javascript">
-            function debug(msg){
-                console.log(msg)
+         /**
+          * flash 内部接口, 第一次调用接口前需要判断接口是否可用
+          * -setParam(obj) 设置基本参数
+          *  obj:
+          *    {
+          *      delayTime: 抽奖结束后弹窗延时
+          *      v0: 开始转动时的转速
+          *      roundNum:  结束转动后的圈数,默认为2
+          *      aMov: 结束转动的加速度
+          *      onStartFunc: 开始执行函数,用于发送请求
+          *      onStopFunc: 结束时执行函数，用于弹窗
+          *      obj.jiaoshou: 按钮事件 叫兽 
+          *      obj.feichuan: 按钮事件 飞船
+          *      obj.huojian: 按钮事件 火箭
+          *      obj.taikongren: 按钮事件 太空人
+          *    }
+          *
+          *
+          * -setStop(i) 设置停止的位置
+          *  i:整数(0~7)
+          *    
+          *  -resetUI() 重置按钮
+          *
+          */
+        function debug(msg){
+            console.log(msg)
+        }
+        /*
+        * 获取 flash 对象;
+        * @movieName : flash输入的name;
+        */
+        function findSWF(movieName) {
+          if (navigator.appName.indexOf("Microsoft")!= -1) {
+            return window[movieName];
+          } else {
+            return document[movieName];
+          }
+          return document.getElementById(movieName)
+        }
+        function functest(){
+            alert('test')
+        }
+        setTimeout(function(){
+            var obj = {};
+            obj.delayTime = 0       // 抽奖结束后弹窗延时
+            obj.v0 = 24             // 开始转动时的转速
+            obj.roundNum = 2        // 结束转动后的圈数,默认为2
+            obj.aMov = 1/20         // 结束转动的加速度
+            obj.onStartFunc = 'start'         // 开始执行函数,用于发送请求
+            obj.onStopFunc = 'stop'    // 结束时执行函数，用于弹窗
+            obj.jiaoshou = 'functest';
+            obj.feichuan = 'functest'
+            obj.huojian = 'functest'
+            obj.taikongren = 'functest'
+            var swf = findSWF("luckDraw");
+            if(swf && swf.setParam)
+                swf.setParam(obj)
+            else{
+                console.log('wait')
             }
-            /*
-            * 获取 flash 对象;
-            * @movieName : flash输入的name;
-            */
-            function findSWF(movieName) {
-              if (navigator.appName.indexOf("Microsoft")!= -1) {
-                return window[movieName];
-              } else {
-                return document[movieName];
-              }
-              return document.getElementById(movieName)
-            }
-            setTimeout(function(){
-                var obj = {};
-                obj.delayTime = 0       // 抽奖结束后弹窗延时
-                obj.v0 = 24             // 开始转动时的转速
-                obj.roundNum = 2        // 结束转动后的圈数,默认为2
-                obj.aMov = 1/20         // 结束转动的加速度
-                obj.onStartFunc = 'start'         // 开始执行函数,用于发送请求
-                obj.onStopFunc = 'stop'    // 结束时执行函数，用于弹窗
-                var swf = findSWF("luckDraw");
-                if(swf && swf.setParam)
-                    swf.setParam(obj)
-                else{
-                    console.log('wait')
-                }
-            },1000)
+        },1000)
 
-            function start(){
-
-            }
-
-            function stop(){
-
-            }
-        </script>
-
-        <script type="text/javascript">
+        function start(){
             setTimeout(function() {
-                var swf = findSWF("rankFlash");
+                var swf = findSWF("luckDraw");
                 if(swf && swf.setStop)
                     swf.setStop(6);
                 else{
                     console.log('wait')
                 }
             }, 3000);
+        }
+
+        function stop(){
+            console.log('中奖了')
+            setTimeout(function() {
+                var swf = findSWF("luckDraw");
+                if(swf && swf.resetUI)
+                    swf.resetUI();
+                else{
+                    console.log('wait')
+                }
+            }, 3000);
+        }
+        </script>
+
+        <script type="text/javascript">
+            
         </script>
     </body>
 </html>
