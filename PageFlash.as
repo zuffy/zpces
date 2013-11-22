@@ -58,23 +58,23 @@
 			handMc.visible =false;
 			
 			function __mouseDown(me:MouseEvent):void {
-				me.currentTarget.gotoAndPlay('down');
+				me.currentTarget.parent.gotoAndPlay('down');
 				handMc.scaleX = handMc.scaleY = 0.8;
 			}
 			function __mouseUp(me:MouseEvent):void {
-				me.currentTarget.gotoAndPlay('up');
+				me.currentTarget.parent.gotoAndPlay('up');
 				handMc.scaleX = handMc.scaleY = 1;
 			}
 			function __mouseClick(me:MouseEvent):void {
 				s.play();
-				var b_name:String = me.currentTarget.name;
+				var b_name:String = me.currentTarget.parent.name;
 				ExternalInterface.call('debug', funcs[b_name+"Func"] + '         '+ b_name+"Func" )
 				ExternalInterface.call(funcs[b_name+"Func"])
 			}
 			function __mouseOver(me:MouseEvent):void {
 				Mouse.hide();
 				handMc.visible = true;
-				me.currentTarget.gotoAndPlay('down');
+				me.currentTarget.parent.gotoAndPlay('down');
 				handMc.x = mouseX+15
 				handMc.y = mouseY+15
 				me.updateAfterEvent();
@@ -82,17 +82,17 @@
 			function __mouseOut(me:MouseEvent):void {
 				Mouse.show();
 				handMc.visible = false;
-				me.currentTarget.gotoAndPlay('up');
+				me.currentTarget.parent.gotoAndPlay('up');
 				handMc.x = mouseX+15
 				handMc.y = mouseY+15
 			}
 
 			for(var i:int = 1; i < 5; i++){
-				this['btn'+i].addEventListener(MouseEvent.MOUSE_DOWN, __mouseDown)
-				this['btn'+i].addEventListener(MouseEvent.MOUSE_UP, __mouseUp)
-				this['btn'+i].addEventListener(MouseEvent.CLICK, __mouseClick)
-				this['btn'+i].addEventListener(MouseEvent.MOUSE_OVER, __mouseOver)
-				this['btn'+i].addEventListener(MouseEvent.MOUSE_OUT, __mouseOut)
+				this['btn'+i].active.addEventListener(MouseEvent.MOUSE_DOWN, __mouseDown)
+				this['btn'+i].active.addEventListener(MouseEvent.MOUSE_UP, __mouseUp)
+				this['btn'+i].active.addEventListener(MouseEvent.CLICK, __mouseClick)
+				this['btn'+i].active.addEventListener(MouseEvent.MOUSE_OVER, __mouseOver)
+				this['btn'+i].active.addEventListener(MouseEvent.MOUSE_OUT, __mouseOut)
 			}
 
 			stage.addEventListener(Event.ENTER_FRAME, function __(e:Event):void {
