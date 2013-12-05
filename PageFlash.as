@@ -48,6 +48,7 @@
 				ExternalInterface.addCallback('setParam', setParam)
 				ExternalInterface.addCallback('setStop', setStop)
 				ExternalInterface.addCallback('resetUI', resetUI)
+				ExternalInterface.addCallback('rotateLoop', rotateLoop)
 			}
 		}
 		private var funcs:Object = {};
@@ -74,6 +75,7 @@
 			function __mouseOver(me:MouseEvent):void {
 				Mouse.hide();
 				handMc.visible = true;
+				stage.addEventListener(Event.ENTER_FRAME,__enterframe)
 				me.currentTarget.parent.gotoAndPlay('down');
 				handMc.x = mouseX+15
 				handMc.y = mouseY+15
@@ -82,25 +84,25 @@
 			function __mouseOut(me:MouseEvent):void {
 				Mouse.show();
 				handMc.visible = false;
+				stage.removeEventListener(Event.ENTER_FRAME,__enterframe)
 				me.currentTarget.parent.gotoAndPlay('up');
 				handMc.x = mouseX+15
 				handMc.y = mouseY+15
+			}
+			function __enterframe(e:Event):void {
+				if(handMc.visible){
+					handMc.x = mouseX+15
+					handMc.y = mouseY+15
+				}
 			}
 
 			for(var i:int = 1; i < 5; i++){
 				this['btn'+i].active.addEventListener(MouseEvent.MOUSE_DOWN, __mouseDown)
 				this['btn'+i].active.addEventListener(MouseEvent.MOUSE_UP, __mouseUp)
 				this['btn'+i].active.addEventListener(MouseEvent.CLICK, __mouseClick)
-				this['btn'+i].active.addEventListener(MouseEvent.MOUSE_OVER, __mouseOver)
-				this['btn'+i].active.addEventListener(MouseEvent.MOUSE_OUT, __mouseOut)
+				this['btn'+i].active.addEventListener(MouseEvent.ROLL_OVER, __mouseOver)
+				this['btn'+i].active.addEventListener(MouseEvent.ROLL_OUT, __mouseOut)
 			}
-
-			stage.addEventListener(Event.ENTER_FRAME, function __(e:Event):void {
-				if(handMc.visible){
-					handMc.x = mouseX+15
-					handMc.y = mouseY+15
-				}
-			})
 		}
 		
 		/**
@@ -122,10 +124,14 @@
 			// get destination rotation in index
 			ld.setStop(i)
 		}
-
+		
 		private function resetUI():void{
 			// reset ui
 			ld.resetUI();
+		}
+		private function rotateLoop():void{
+			// reset ui
+			ld.loop();
 		}
 
 	}

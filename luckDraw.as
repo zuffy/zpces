@@ -38,6 +38,9 @@
 		
 		private function onStart(me:MouseEvent):void {
 			ExternalInterface.call(onStartFunc)
+		}
+
+		public function loop():void {
 			startBtn.removeEventListener(MouseEvent.CLICK, onStart)
 			startBtn.enabled = false;
 			rotationv0();
